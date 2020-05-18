@@ -39,7 +39,8 @@ def create_app(test_config=None):
                 for ingredient in selection:
                     ingredients.append(ingredient.format())
             else:
-                ingredients.append('There are no ingredients yet. Why dont you put some?')
+                ingredients.append(
+                    'There are no ingredients yet. Why dont you put some?')
         except Exception as e:
             print(e)
 
@@ -66,6 +67,26 @@ def create_app(test_config=None):
         return jsonify({
             'status': True,
             'ingredient': ingredient.format()
+        })
+
+    @app.route('/ingredients/<int:id>', methods=['PATCH'])
+    def patch_ingredient(id):
+        res = request.get_json()
+
+        try:
+            selection = Ingredients.query.filter(
+                Ingredients.id == id).one_or_none()
+            if 'name' in res:
+                selection.name = res['name']
+            if 'quantity' in res:
+                selection.quantity = res['quantity']
+
+            selection.update
+        except Exception as e:
+            print(e)
+        return jsonify({
+            'status': True,
+            'ingredient': selection.format()
         })
 
     return app

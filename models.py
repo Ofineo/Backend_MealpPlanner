@@ -4,7 +4,8 @@ from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
 import json
 
-database_path = os.environ['DATABASE_URL']
+# database_path = os.environ['DATABASE_URL']
+database_path = "postgres://postgres:postgres@localhost:5432/meals"
 
 db = SQLAlchemy()
 
@@ -74,8 +75,8 @@ class Ingredients(db.Model):
         db.session.commit()
 
     def format(self):
-            return{
-                'id': self.id,
-                'name': self.name,
-                'quantity': self.quantity,
-            }
+        return{
+            'id': self.id,
+            'name': self.name,
+            'quantity': self.quantity,
+        }
