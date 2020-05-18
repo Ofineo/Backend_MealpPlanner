@@ -38,15 +38,34 @@ def create_app(test_config=None):
             if selection:
                 for ingredient in selection:
                     ingredients.append(ingredient.format())
-                else:
-                    ingredients.append(
-                        'There are no ingridients yet. Why dont you put some?')
+            else:
+                ingredients.append('There are no ingredients yet. Why dont you put some?')
         except Exception as e:
             print(e)
 
-        return.jsonify({
+        return jsonify({
             'status': 'ok',
             'ingredients': ingredients
+        })
+
+    @app.route('/ingredients', methods=['POST'])
+    def add_ingredient():
+        res = request.get_json()
+
+        try:
+            ingredient = Ingredients(
+                name=res['name'],
+                quantity=res['quantity']
+            )
+
+            ingredient.insert()
+
+        except Exception as e:
+            print(e)
+
+        return jsonify({
+            'status': True,
+            'ingredient': ingredient.format()
         })
 
     return app
