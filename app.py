@@ -81,7 +81,7 @@ def create_app(test_config=None):
             if 'quantity' in res:
                 selection.quantity = res['quantity']
 
-            selection.update
+            selection.update()
         except Exception as e:
             print(e)
         return jsonify({
