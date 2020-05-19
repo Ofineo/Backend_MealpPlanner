@@ -1,11 +1,11 @@
 import os
-from sqlalchemy import Column, String, Integer, DateTime, ForeignKey
+from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
 import json
 
-database_path = os.environ['DATABASE_URL']
-#database_path = "postgres://postgres:postgres@localhost:5432/meals"
+#database_path = os.environ['DATABASE_URL']
+database_path = "postgres://postgres:postgres@localhost:5432/meals"
 
 db = SQLAlchemy()
 
@@ -41,10 +41,12 @@ Table Ingredients
 
 
 class Ingredients(db.Model):
-    __tablename__: 'Ingredients'
+    __tablename__: 'ingredients'
     id = Column(Integer, primary_key=True)
     name = Column(String(), nullable=False)
     quantity = Column(String(), nullable=False)
+    meal = relationship("Meals",back_populates="ingredients")
+
 
     '''
     insert()
@@ -79,4 +81,67 @@ class Ingredients(db.Model):
             'id': self.id,
             'name': self.name,
             'quantity': self.quantity,
+        }
+
+
+class Meals(db.Model):
+    __tablename__: 'meals'
+    id = Column(Integer, primary_key=True)
+    category = Column(Integer, nullable=False)
+    title = Column(String(), nullable=False)
+    affordability = Column(String(), nullable=False)
+    complexity = Column(String(), nullable=False)
+    imageUrl = Column(String(), nullable=False)
+    duration = Column(String(), nullable=False)
+    steps = Column(String(), nullable=False)
+    glutenfree = Column(Boolean, nullable=False)
+    vegan = Column(Boolean, nullable=False)
+    vegetarian = Column(Boolean, nullable=False)
+    lactosefree = Column(Boolean, nullable=False)
+    ingredients = relationship("Ingredients", back_populates="meal")
+
+
+    '''
+    insert()
+    inserts a new model into a database
+    '''
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    '''
+    update()
+    updates a model into a database
+    the model must exist in the database
+    '''
+
+    def update(self):
+        db.session.commit()
+
+    '''
+    delete()
+    deletes a model into a database
+    the model must exist in the database
+    '''
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format(self):
+        return{
+            'id' : self.id,
+            'category' : self.category,
+            'title' : self.title,
+            'affordability' : self.affordability,
+            'complexity' : self.complexity,
+            'imageUrl' : self.imageUrl,
+            'duration' : self.duration,
+            'ingredients' : self.ingredients,
+            'steps' : self.steps,
+            'glutenfree' : self.glutenFree,
+            'vegan' : self.vegan,
+            'vegetarian' : self.vegetarian,
+            'lactosefree' : self.lactosefree,
         }
