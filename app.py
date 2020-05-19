@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, abort, jsonify, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from models import setup_db, Ingredients
+from models import setup_db, Ingredients, Meals
 
 
 def create_app(test_config=None):
@@ -24,7 +24,7 @@ def create_app(test_config=None):
     @app.route('/')
     def main():
 
-        main_message = 'Hi There. Its running!'
+        main_message = 'Hi There. Backend it\'s running!'
 
         return main_message
 
@@ -45,9 +45,32 @@ def create_app(test_config=None):
             print(e)
 
         return jsonify({
-            'status': 'ok',
+            'status': True,
             'ingredients': ingredients
         })
+
+    @app.route('/meals')
+    def get_meals():
+
+        meals= []
+
+        try:
+            selection = Meals.query.all()
+
+            if selection:
+                for meal in selection:
+                    meals.append(meal.format())
+            else:
+                meals.append('Nothing here yat')
+        except Exception as e:
+            print(e)
+
+        return jsonify({
+            'status': True,
+            'meals': meals
+        })
+    
+    
 
     @app.route('/ingredients', methods=['POST'])
     def add_ingredient():
