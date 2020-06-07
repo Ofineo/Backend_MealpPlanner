@@ -45,8 +45,8 @@ class Ingredients(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(), nullable=False)
     quantity = Column(String(), nullable=False)
-    meal = relationship("Meals",back_populates="ingredients")
-
+    meal_id = Column(Integer, ForeignKey('meals.id'))
+    meal = relationship("Meals", back_populates="ingredients")
 
     '''
     insert()
@@ -100,7 +100,6 @@ class Meals(db.Model):
     lactosefree = Column(Boolean, nullable=False)
     ingredients = relationship("Ingredients", back_populates="meal")
 
-
     '''
     insert()
     inserts a new model into a database
@@ -121,7 +120,7 @@ class Meals(db.Model):
 
     '''
     delete()
-    deletes a model into a database
+    deletes a model into a database 
     the model must exist in the database
     '''
 
@@ -131,17 +130,17 @@ class Meals(db.Model):
 
     def format(self):
         return{
-            'id' : self.id,
-            'category' : self.category,
-            'title' : self.title,
-            'affordability' : self.affordability,
-            'complexity' : self.complexity,
-            'imageUrl' : self.imageUrl,
-            'duration' : self.duration,
-            'ingredients' : self.ingredients,
-            'steps' : self.steps,
-            'glutenfree' : self.glutenFree,
-            'vegan' : self.vegan,
-            'vegetarian' : self.vegetarian,
-            'lactosefree' : self.lactosefree,
+            'id': self.id,
+            'category': self.category,
+            'title': self.title,
+            'affordability': self.affordability,
+            'complexity': self.complexity,
+            'imageUrl': self.imageUrl,
+            'duration': self.duration,
+            'ingredients': self.ingredients,
+            'steps': self.steps,
+            'glutenfree': self.glutenfree,
+            'vegan': self.vegan,
+            'vegetarian': self.vegetarian,
+            'lactosefree': self.lactosefree,
         }

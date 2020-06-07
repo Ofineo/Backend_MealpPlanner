@@ -52,7 +52,7 @@ def create_app(test_config=None):
     @app.route('/meals')
     def get_meals():
 
-        meals= []
+        meals = []
 
         try:
             selection = Meals.query.all()
@@ -69,8 +69,41 @@ def create_app(test_config=None):
             'status': True,
             'meals': meals
         })
-    
-    
+
+    @app.route('/meals', methods=['POST'])
+    def post_meal():
+        res = request.get_json()
+
+        try:
+            ingredient = Ingredients(
+                name='radish',
+                quantity=3
+            )
+
+            meal = Meals(
+                category=res['category'],
+                title=res['title'],
+                affordability=res['affordability'],
+                complexity=res['complexity'],
+                imageUrl=res['imageUrl'],
+                duration=res['duration'],
+                steps=res['steps'],
+                glutenfree=res['glutenfree'],
+                vegan=res['vegan'],
+                vegetarian=res['vegetarian'],
+                lactosefree=res['lactosefree'],
+            )
+            meal.insert()
+  
+
+        except Exception as e:
+            print('------------------------------------------',e)
+           
+
+        return jsonify({
+            'status': True,
+            'meals': meal.format()
+        })
 
     @app.route('/ingredients', methods=['POST'])
     def add_ingredient():
