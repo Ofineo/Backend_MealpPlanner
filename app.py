@@ -44,6 +44,10 @@ def create_app(test_config=None):
                     'There are no ingredients yet. Why dont you put some?')
         except Exception as e:
             print(e)
+            return jsonify({
+                'status': False,
+                'ingredients': 'There was a problem with the request'
+            })
 
         return jsonify({
             'status': True,
