@@ -91,8 +91,8 @@ def create_app(test_config=None):
                         ingredient.meal_id= ing['meal_id']
                     else:
                         raise Exception("it's missing the ingredient meal_id key:value")
-                    
-                 ingredient.insert()
+
+                ingredient.insert()
                     
 
             meal = Meals()
