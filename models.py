@@ -45,8 +45,8 @@ class Ingredients(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(), nullable=False)
     quantity = Column(String(), nullable=False)
-    # meal_id = Column(Integer, ForeignKey('meals.id'))
-    # meal = relationship("Meals", back_populates="ingredients")
+    meal_id = Column(Integer, ForeignKey('meals.id'))
+    meal = relationship("Meals", back_populates="ingredients")
 
     '''
     insert()
@@ -99,7 +99,7 @@ class Meals(db.Model):
     vegan = Column(Boolean, nullable=False)
     vegetarian = Column(Boolean, nullable=False)
     lactosefree = Column(Boolean, nullable=False)
-    # ingredients = relationship("Ingredients", back_populates="meal")
+    ingredients = relationship("Ingredients", back_populates="meal")
 
     '''
     insert()
