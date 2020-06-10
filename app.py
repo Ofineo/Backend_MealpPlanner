@@ -34,6 +34,7 @@ def create_app(test_config=None):
         try:
 
             selection = Ingredients.query.all()
+            print(selection)
 
             if selection:
                 for ingredient in selection:
@@ -194,7 +195,7 @@ def create_app(test_config=None):
 
         return jsonify({
             'status': True,
-            'ingredient': new_ingredient.format()
+            'ingredient': ingredient.format()
         })
 
     @app.route('/ingredients/<int:id>', methods=['PATCH'])
