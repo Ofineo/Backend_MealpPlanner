@@ -76,29 +76,77 @@ def create_app(test_config=None):
         print(res)
 
         try:
-            ingredient = Ingredients(
-                name='radish',
-                quantity=3
-            )
+            for ing in res['ingredients']:
+                ingredient = Ingredients()
+                if 'name' in ing:
+                    ingredient.name=ing['name']
+                else:
+                    raise Exception("it's missing the ingredient name key:value")
+                if 'quantity' in ing:
+                    ingredient.quantity=ing['quantity']
+                else:
+                    raise Exception("it's missing the ingredient quantity key:value")
+                if 'meal_id' in ing:
+                    ingredient.meal_id= ing['meal_id']
+                else:
+                    raise Exception("it's missing the ingredient meal_id key:value")
+                    
 
-            meal = Meals(
-                category=res['category'],
-                title=res['title'],
-                affordability=res['affordability'],
-                complexity=res['complexity'],
-                imageUrl=res['imageUrl'],
-                duration=res['duration'],
-                steps=res['steps'],
-                glutenfree=res['glutenfree'],
-                vegan=res['vegan'],
-                vegetarian=res['vegetarian'],
-                lactosefree=res['lactosefree'],
-            )
+            meal = Meals()
+            if 'category' in res:
+                meal.category=res['category']
+            else:
+                raise Exception("it's missing the meal category key:value")
+            if 'title' in res:
+                meal.title=res['title']
+            else:
+                raise Exception("it's missing the meal title key:value")
+            if 'affordability' in res:
+                meal.affordability=res['affordability']
+            else:
+                raise Exception("it's missing the meal affordability key:value")
+            if 'complexity' in res:
+                meal.complexity= res['complexity']
+            else:
+                raise Exception("it's missing the meal complexity key:value")
+            if 'imageUrl' in res:
+                meal.imageUrl= res['imageUrl'],
+            else:
+                raise Exception("it's missing the meal imageUrl key:value")
+            if 'duration' in res:
+                meal.duration=res['duration']
+            else:
+                raise Exception("it's missing the meal duration key:value")
+            if 'steps' in res:
+                meal.steps=res['steps']
+            else:
+                raise Exception("it's missing the meal steps key:value")
+            if 'glutenfree'in res:
+                meal.glutenfree= res['glutenfree']
+            else:
+                raise Exception("it's missing the meal glutenfree key:value")
+            if 'vegan' in res:
+                meal.vegan=res['vegan']
+            else:
+                raise Exception("it's missing the meal vegan key:value")
+            if 'vegetarian'in res:
+                meal.vegetarian=res['vegetarian']
+            else:
+                raise Exception("it's missing the meal vegetarian key:value")
+            if 'lactosefree' in res:
+                meal.lactosefree=res['lactosefree']
+            else:
+                raise Exception("it's missing the meal lactosefree key:value")
 
             meal.insert()
+            ingredient.insert()
 
         except Exception as e:
-            print('------------------------------------------', e)
+            print('--------------', e)
+            return jsonify({
+                'status': False,
+                'meals': 'there was a problem with the request'
+            })
 
         return jsonify({
             'status': True,
@@ -133,6 +181,10 @@ def create_app(test_config=None):
 
         except Exception as e:
             print(e)
+            return jsonify({
+                'status': False,
+                'ingredient': 'there was a problem with the request'
+            })
 
         new_ingredient = Ingredients.query.filter(Ingredients.name == res['name'], Ingredients.meal_id==1).one_or_none()
         print('-----------------',new_ingredient)
