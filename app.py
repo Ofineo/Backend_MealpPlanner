@@ -73,6 +73,7 @@ def create_app(test_config=None):
     @app.route('/meals', methods=['POST'])
     def post_meal():
         res = request.get_json()
+        print(res)
 
         try:
             ingredient = Ingredients(
@@ -93,12 +94,11 @@ def create_app(test_config=None):
                 vegetarian=res['vegetarian'],
                 lactosefree=res['lactosefree'],
             )
+
             meal.insert()
-  
 
         except Exception as e:
-            print('------------------------------------------',e)
-           
+            print('------------------------------------------', e)
 
         return jsonify({
             'status': True,
@@ -108,21 +108,38 @@ def create_app(test_config=None):
     @app.route('/ingredients', methods=['POST'])
     def add_ingredient():
         res = request.get_json()
+        print(res)
 
         try:
-            ingredient = Ingredients(
-                name=res['name'],
-                quantity=res['quantity']
-            )
+            ingredient = Ingredients()
+
+            if 'name' in res:
+                ingredient.name = res['name']
+            else:
+                raise Exception("it's missing the ingredient name key:value")
+
+            if 'quantity' in res:
+                ingredient.quantity=res['quantity']
+            else:
+                raise Exception("it's missing the ingredient quantity key:value")
+
+            if 'meal_id' in res:
+                ingredient.meal_id =1
+            else:
+                ingredient.meal_id =1
+                #raise Exception("it's missing the ingredient meal_id key:value")
 
             ingredient.insert()
 
         except Exception as e:
             print(e)
 
+        new_ingredient = Ingredients.query.filter(Ingredients.name == res['name'], Ingredients.meal_id==1).one_or_none()
+        print('-----------------',new_ingredient)
+
         return jsonify({
             'status': True,
-            'ingredient': ingredient.format()
+            'ingredient': new_ingredient.format()
         })
 
     @app.route('/ingredients/<int:id>', methods=['PATCH'])

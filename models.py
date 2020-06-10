@@ -81,6 +81,7 @@ class Ingredients(db.Model):
             'id': self.id,
             'name': self.name,
             'quantity': self.quantity,
+            'meal_id': self.meal_id
         }
 
 
