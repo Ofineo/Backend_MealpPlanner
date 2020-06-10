@@ -76,20 +76,23 @@ def create_app(test_config=None):
         print(res)
 
         try:
-            for ing in res['ingredients']:
-                ingredient = Ingredients()
-                if 'name' in ing:
-                    ingredient.name=ing['name']
-                else:
-                    raise Exception("it's missing the ingredient name key:value")
-                if 'quantity' in ing:
-                    ingredient.quantity=ing['quantity']
-                else:
-                    raise Exception("it's missing the ingredient quantity key:value")
-                if 'meal_id' in ing:
-                    ingredient.meal_id= ing['meal_id']
-                else:
-                    raise Exception("it's missing the ingredient meal_id key:value")
+            if 'ingredients' in res:
+                for ing in res['ingredients']:
+                    ingredient = Ingredients()
+                    if 'name' in ing:
+                        ingredient.name=ing['name']
+                    else:
+                        raise Exception("it's missing the ingredient name key:value")
+                    if 'quantity' in ing:
+                        ingredient.quantity=ing['quantity']
+                    else:
+                        raise Exception("it's missing the ingredient quantity key:value")
+                    if 'meal_id' in ing:
+                        ingredient.meal_id= ing['meal_id']
+                    else:
+                        raise Exception("it's missing the ingredient meal_id key:value")
+                    
+                 ingredient.insert()
                     
 
             meal = Meals()
@@ -139,7 +142,7 @@ def create_app(test_config=None):
                 raise Exception("it's missing the meal lactosefree key:value")
 
             meal.insert()
-            ingredient.insert()
+           
 
         except Exception as e:
             print('--------------', e)
