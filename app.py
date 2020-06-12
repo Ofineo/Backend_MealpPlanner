@@ -58,11 +58,11 @@ def create_app(test_config=None):
     def get_meals():
 
         meals = []
-        
 
         try:
             selection = Meals.query.all()
-            print(selection)
+
+            # TODO ADD INGREDIENTS TO THE MEAL PICK INGREDIENTS FROM TABLE AND FILTER BY MEAL
 
             if selection:
                 for meal in selection:
@@ -267,5 +267,6 @@ def create_app(test_config=None):
             "error": 405,
             "message": "method not allowed"
         }), 405
+
 
 APP = create_app()

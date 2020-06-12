@@ -44,7 +44,7 @@ class Ingredients(db.Model):
     __tablename__: 'ingredients'
     id = Column(Integer, primary_key=True)
     name = Column(String(), nullable=False)
-    quantity = Column(String(), nullable=False)
+    quantity = Column(Integer, nullable=False)
     meal_id = Column(Integer, ForeignKey('meals.id'))
     meal = relationship("Meals", back_populates="ingredients")
 
@@ -138,7 +138,6 @@ class Meals(db.Model):
             'complexity': self.complexity,
             'imageUrl': self.imageUrl,
             'duration': self.duration,
-            'ingredients': self.ingredients,
             'steps': self.steps,
             'glutenfree': self.glutenfree,
             'vegan': self.vegan,
