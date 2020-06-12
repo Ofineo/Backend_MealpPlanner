@@ -58,15 +58,17 @@ def create_app(test_config=None):
     def get_meals():
 
         meals = []
+        
 
         try:
             selection = Meals.query.all()
+            print(selection)
 
             if selection:
                 for meal in selection:
                     meals.append(meal.format())
             else:
-                meals.append('Nothing here yat')
+                meals.append('Nothing here yet')
         except Exception as e:
             print(e)
 
