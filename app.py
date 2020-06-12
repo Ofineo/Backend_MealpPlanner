@@ -85,69 +85,71 @@ def create_app(test_config=None):
                 for ing in res['ingredients']:
                     ingredient = Ingredients()
                     if 'name' in ing:
-                        ingredient.name=ing['name']
+                        ingredient.name = ing['name']
                     else:
-                        raise Exception("it's missing the ingredient name key:value")
+                        raise Exception(
+                            "it's missing the ingredient name key:value")
                     if 'quantity' in ing:
-                        ingredient.quantity=ing['quantity']
+                        ingredient.quantity = ing['quantity']
                     else:
-                        raise Exception("it's missing the ingredient quantity key:value")
+                        raise Exception(
+                            "it's missing the ingredient quantity key:value")
                     if 'meal_id' in ing:
-                        ingredient.meal_id= ing['meal_id']
+                        ingredient.meal_id = ing['meal_id']
                     else:
-                        raise Exception("it's missing the ingredient meal_id key:value")
+                        raise Exception(
+                            "it's missing the ingredient meal_id key:value")
 
                 ingredient.insert()
-                    
 
             meal = Meals()
             if 'category' in res:
-                meal.category=res['category']
+                meal.category = res['category']
             else:
                 raise Exception("it's missing the meal category key:value")
             if 'title' in res:
-                meal.title=res['title']
+                meal.title = res['title']
             else:
                 raise Exception("it's missing the meal title key:value")
             if 'affordability' in res:
-                meal.affordability=res['affordability']
+                meal.affordability = res['affordability']
             else:
-                raise Exception("it's missing the meal affordability key:value")
+                raise Exception(
+                    "it's missing the meal affordability key:value")
             if 'complexity' in res:
-                meal.complexity= res['complexity']
+                meal.complexity = res['complexity']
             else:
                 raise Exception("it's missing the meal complexity key:value")
             if 'imageUrl' in res:
-                meal.imageUrl= res['imageUrl'],
+                meal.imageUrl = res['imageUrl'],
             else:
                 raise Exception("it's missing the meal imageUrl key:value")
             if 'duration' in res:
-                meal.duration=res['duration']
+                meal.duration = res['duration']
             else:
                 raise Exception("it's missing the meal duration key:value")
             if 'steps' in res:
-                meal.steps=res['steps']
+                meal.steps = res['steps']
             else:
                 raise Exception("it's missing the meal steps key:value")
-            if 'glutenfree'in res:
-                meal.glutenfree= res['glutenfree']
+            if 'glutenfree' in res:
+                meal.glutenfree = res['glutenfree']
             else:
                 raise Exception("it's missing the meal glutenfree key:value")
             if 'vegan' in res:
-                meal.vegan=res['vegan']
+                meal.vegan = res['vegan']
             else:
                 raise Exception("it's missing the meal vegan key:value")
-            if 'vegetarian'in res:
-                meal.vegetarian=res['vegetarian']
+            if 'vegetarian' in res:
+                meal.vegetarian = res['vegetarian']
             else:
                 raise Exception("it's missing the meal vegetarian key:value")
             if 'lactosefree' in res:
-                meal.lactosefree=res['lactosefree']
+                meal.lactosefree = res['lactosefree']
             else:
                 raise Exception("it's missing the meal lactosefree key:value")
 
             meal.insert()
-           
 
         except Exception as e:
             print('--------------', e)
@@ -175,15 +177,15 @@ def create_app(test_config=None):
                 raise Exception("it's missing the ingredient name key:value")
 
             if 'quantity' in res:
-                ingredient.quantity=res['quantity']
+                ingredient.quantity = res['quantity']
             else:
-                raise Exception("it's missing the ingredient quantity key:value")
+                raise Exception(
+                    "it's missing the ingredient quantity key:value")
 
             if 'meal_id' in res:
-                ingredient.meal_id =1
+                ingredient.meal_id = 1
             else:
-                ingredient.meal_id =1
-                #raise Exception("it's missing the ingredient meal_id key:value")
+                ingredient.meal_id = 1
 
             ingredient.insert()
 
@@ -194,8 +196,9 @@ def create_app(test_config=None):
                 'ingredient': 'there was a problem with the request'
             })
 
-        new_ingredient = Ingredients.query.filter(Ingredients.name == res['name'], Ingredients.meal_id==1).one_or_none()
-        print('-----------------',new_ingredient)
+        new_ingredient = Ingredients.query.filter(
+            Ingredients.name == res['name'], Ingredients.meal_id == 1).one_or_none()
+        print('-----------------', new_ingredient)
 
         return jsonify({
             'status': True,
@@ -217,6 +220,11 @@ def create_app(test_config=None):
             selection.update()
         except Exception as e:
             print(e)
+            return jsonify({
+                'status': False,
+                'ingredient': 'there was a problem with the request'
+            })
+
         return jsonify({
             'status': True,
             'ingredient': selection.format()
@@ -224,5 +232,38 @@ def create_app(test_config=None):
 
     return app
 
+    # Error Handling
+
+    @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify({
+            "success": False,
+            "error": 400,
+            "message": "bad request"
+        }), 400
+
+    @app.errorhandler(422)
+    def unprocessable(error):
+        return jsonify({
+            "success": False,
+            "error": 422,
+            "message": "unprocessable."
+        }), 422
+
+    @app.errorhandler(404)
+    def not_found(error):
+        return jsonify({
+            "success": False,
+            "error": 404,
+            "message": "The server can not find the requested resource."
+        }), 404
+
+    @app.errorhandler(405)
+    def method_not_allowed(error):
+        return jsonify({
+            "success": False,
+            "error": 405,
+            "message": "method not allowed"
+        }), 405
 
 APP = create_app()
